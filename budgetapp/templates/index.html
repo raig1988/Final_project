@@ -1,0 +1,14 @@
+{% extends "layout.html" %} 
+{% block title %}  
+    Main
+{% endblock %}   
+
+{% block main %} 
+Welcome {{ user_id }}
+<ul>
+    <li><a href="/transaction">Register Transaction</a></li>
+    <li><a href="/budget">Register Budget</a></li>
+    <li><a href="/results">View results</a></li>
+</ul>
+
+{% endblock %} 

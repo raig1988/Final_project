@@ -1,0 +1,41 @@
+{% extends "layout.html" %} 
+{% block title %}  
+    Results
+{% endblock %}
+{% block main %}
+<form action="" method="post">
+    <div class="mb-3">
+        <h2>Select date</h2>
+        <input autocomplete="off" class="form-control mx-auto w-auto" type="number" name="month" placeholder="month" min="1" max="12" required>
+        <input autocomplete="off" class="form-control mx-auto w-auto" type="number" name="year" placeholder="year" min="2000" max="3000" required>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-start">Day</th>
+            <th class="text-start">Type</th>
+            <th class="text-start">Transaction</th>
+            <th class="text-end">Amount</th>
+            <th class="text-end">Input date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td class="text-start">{{ transaction.day }}</td>
+            <td class="text-start">{{ transaction.type }}</td>
+            <td class="text-start">{{ transaction.expense }}</td>
+            <td class="text-end">{{ transaction.amount }}</td>
+            <td class="text-end">{{ transaction.input_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

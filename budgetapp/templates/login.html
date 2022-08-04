@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}
+    Login
+{% endblock %}
+{% block main %}
+    <form method="POST" action="">
+    {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.email.label(class="form-control-label") }}
+            {% if form.email.errors %}
+                {{ form.email(class="form-control mx-auto w-auto is-invalid") }}
+                    {% for error in form.email.errors %}
+                    <div class="invalid-feedback">
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+            {% else %}
+                {{ form.email(class="form-control mx-auto w-auto") }}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.password.label(class="form-control-label") }}
+            {% if form.password.errors %}
+                {{ form.password(class="form-control mx-auto w-auto is-invalid") }}
+                    {% for error in form.password.errors %}
+                    <div class="invalid-feedback">
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+            {% else %}
+                {{ form.password(class="form-control mx-auto w-auto") }}
+            {% endif %}
+        </div>
+        <div class="mb-3 form-check">
+            {{ form.remember(class="form-check mx-auto w-auto") }}
+            {{ form.remember.label(class="form-check-label") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('reset_request') }}">Forgot Password</a>
+    </form>
+{% endblock %}

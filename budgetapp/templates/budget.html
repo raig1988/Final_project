@@ -1,0 +1,53 @@
+{% extends "layout.html" %} 
+{% block title %}  
+    Budget
+{% endblock %}   
+
+{% block main %} 
+<form action="/budget" method="post">
+    <div class="mb-3">
+        <h2>Select type of expense</h2>
+        <select class="form-select mx-auto w-auto" name="type" required>
+            <option disabled selected>Select type of expense</option>
+            <option value="Apps">Apps</option>
+            <option value="Rent">Rent</option>
+            <option value="Services">Services</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Cleaning">Cleaning</option>
+            <option value="Personal Care">Personal care</option>
+            <option value="Supplements">Supplements</option>
+            <option value="Health & Insurance">Health & Insurance</option>
+            <option value="Travel">Travel</option>
+            <option value="Others">Others</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <h2>Enter amount</h2>
+        <input class="form-select mx-auto w-auto" autocomplete="off" type="number"name="amount" placeholder="Ex. 100" min="0" required>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Register budget</button>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td class="text-start">Type</td>
+            <td class="text-start">Amount</td>
+            <td class="text-start">Input date</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for variable in budget %} 
+        <tr>
+            <td class="text-start">{{ variable.type }}</td>
+            <td class="text-start">{{ variable.amount_budget }}</td>
+            <td class="text-start">{{ variable.input_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

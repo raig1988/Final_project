@@ -1,0 +1,50 @@
+{% extends "layout.html" %} 
+{% block title %}  
+    Transactions
+{% endblock %}
+{% block main %} 
+<form method="post" action="">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        <h2>Select date</h2>
+        {{ form.day.label(class="form-control-label")}}
+        {{ form.day(class="form-control mx-auto w-auto")}}
+        {{ form.month.label(class="form-control-label")}}
+        {{ form.month(class="form-control mx-auto w-auto")}}
+        {{ form.year.label(class="form-control-label")}}
+        {{ form.year(class="form-control mx-auto w-auto")}}
+    </div>
+    <div class="mb-3">
+        <h2>Select type of expense</h2>
+        <select class="form-select mx-auto w-auto" name="type" required>
+        {{ form.type.label(class="form-control-label")}}
+        {% for option in form.type %}
+            {% if loop.first %}
+                <option value="" disabled selected>Select type of expense</option>
+            {% endif %}
+            {{ option }}
+        {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <h2>Enter transaction and amount</h2>
+        {{ form.expense.label(class="form-control-label")}}
+        {{ form.expense(class="form-control mx-auto w-auto", placeholder="Ex. Walmart") }}
+        {{ form.amount.label(class="form-control-label")}}
+        {% if form.amount.errors %}
+            {{ form.amount(class="form-control mx-auto w-auto is-invalid", placeholder="Ex. 100") }}
+                {% for error in form.amount.errors %}
+                <div class="invalid-feedback">
+                    <span>{{ error }}</span>
+                </div>
+                {% endfor %}
+        {% else %}
+            {{ form.amount(class="form-control mx-auto w-auto", placeholder="Ex. 100") }}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+
+{% endblock %}
