@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     hash = db.Column(db.String, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     transactions = db.relationship('Transactions', backref="user")
+    budget = db.relationship('Budget', backref="user")
 
     def get_reset_token(self, expires_sec=300):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -47,3 +48,14 @@ class Transactions(db.Model):
 
     def __repr__(self):
         return f"Transaction('{self.day}' , '{self.month}' , '{self.year}' , '{self.type}' , '{self.expense}' , '{self.input_date}')"
+
+
+class Budget(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    type_budget = db.Column(db.Text, nullable=False)
+    amount_budget = db.Column(db.Float, nullable=False)
+    input_date = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Budget('{self.type}' , '{self.amount_budget}' , '{self.input_date}')"

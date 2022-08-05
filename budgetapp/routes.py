@@ -1,7 +1,7 @@
-from flask import redirect, render_template, request, session, flash, url_for
+from flask import redirect, render_template, request, flash, url_for
 from budgetapp import app, db, bcrypt, mail
-from budgetapp.models import User, Transactions
-from budgetapp.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, TransactionForm
+from budgetapp.models import User, Transactions, Budget
+from budgetapp.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, TransactionForm, BudgetForm
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 
@@ -113,9 +113,33 @@ def transaction():
         return redirect(url_for("transaction"))
     return render_template("transaction.html", form=form)
 
+@app.route("/budget", methods=["GET", "POST"])
+@login_required
+def budget():
+    id = current_user.id
+    form = BudgetForm()
+    if form.validate_on_submit():
+        budget = Budget(type_budget=form.type_budget.data, amount_budget=form.amount_budget.data, user_id=id)
+        db.session.add(budget)
+        db.session.commit()
+        flash(f" Budget type {budget.type_budget} registered correctly", "success")
+        return redirect(url_for("budget"))
+    budget = Budget.query.filter_by(user_id=id)
+    return render_template("budget.html", form=form, budget=budget)
+
+@app.route("/delete_budget/<int:id>", methods=["POST"])
+@login_required
+def delete_budget(id):
+    budget_to_delete = Budget.query.get_or_404(id)
+    db.session.delete(budget_to_delete)
+    db.session.commit()
+    flash(f"Budget type {budget_to_delete.type_budget} deleted successfully", "success")
+    return redirect(url_for("budget"))
+
 @app.route("/results", methods=["GET", "POST"])
 @login_required
 def results():
+    id = current_user.id
     if request.method == "POST":
         month = request.form.get("month")
         if not month:
@@ -124,5 +148,16 @@ def results():
         if not year:
             flash("You need to enter the year", "warning")
         transactions = Transactions.query.filter(month==month, year==year)
-        return render_template("results.html", transactions=transactions)
-    return render_template("results.html")
+        budget = Budget.query.filter_by(user_id=id).all()
+        return render_template("results.html", transactions=transactions, budget=budget)
+    budget = Budget.query.filter_by(user_id=id).all()
+    return render_template("results.html", budget=budget)
+
+@app.route("/delete_transaction/<int:id>", methods=["POST"])
+@login_required
+def delete_transaction(id):
+    transaction_to_delete = Transactions.query.get_or_404(id)
+    db.session.delete(transaction_to_delete)
+    db.session.commit()
+    flash(f"Transaction {transaction_to_delete.expense} deleted successfully", "success")
+    return redirect(url_for("results"))

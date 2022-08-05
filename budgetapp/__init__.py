@@ -16,6 +16,8 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # DATABASE
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///budget.db'
+app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_RECORD_QUERIES'] = True
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)

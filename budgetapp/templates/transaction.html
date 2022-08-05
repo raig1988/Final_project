@@ -6,28 +6,28 @@
 <form method="post" action="">
     {{ form.hidden_tag() }}
     <div class="mb-3">
-        <h2>Select date</h2>
-        {{ form.day.label(class="form-control-label")}}
-        {{ form.day(class="form-control mx-auto w-auto")}}
-        {{ form.month.label(class="form-control-label")}}
-        {{ form.month(class="form-control mx-auto w-auto")}}
-        {{ form.year.label(class="form-control-label")}}
-        {{ form.year(class="form-control mx-auto w-auto")}}
+        <h2 class="pb-2">Select date</h2>
+        {{ form.day.label }}
+        {{ form.day(class="mx-auto w-auto")}}
+        {{ form.month.label }}
+        {{ form.month(class="mx-auto w-auto")}}
+        {{ form.year.label }}
+        {{ form.year(class="mx-auto w-auto")}}
     </div>
     <div class="mb-3">
-        <h2>Select type of expense</h2>
+        <h2 class="pb-2">Select type of expense</h2>
         <select class="form-select mx-auto w-auto" name="type" required>
         {{ form.type.label(class="form-control-label")}}
         {% for option in form.type %}
             {% if loop.first %}
-                <option value="" disabled selected>Select type of expense</option>
+                <option value="" disabled selected>Select</option>
             {% endif %}
             {{ option }}
         {% endfor %}
         </select>
     </div>
     <div class="mb-3">
-        <h2>Enter transaction and amount</h2>
+        <h2 class="pb-2">Enter expense and amount</h2>
         {{ form.expense.label(class="form-control-label")}}
         {{ form.expense(class="form-control mx-auto w-auto", placeholder="Ex. Walmart") }}
         {{ form.amount.label(class="form-control-label")}}
@@ -43,7 +43,7 @@
         {% endif %}
     </div>
     <div class="mb-3">
-        {{ form.submit(class="btn btn-primary") }}
+        {{ form.submit(class="btn btn-success") }}
     </div>
 </form>
 

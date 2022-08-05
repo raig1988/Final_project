@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, FloatField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError, NumberRange
-from budgetapp.models import User
+from budgetapp.models import User, Budget
 
 class RegistrationForm(FlaskForm):
     username = StringField(label='Username', validators=[DataRequired(), Length(min=3, max=20)])
@@ -66,3 +66,13 @@ class TransactionForm(FlaskForm):
     expense = StringField("Expense", validators=[DataRequired()])
     amount= FloatField("Amount", validators=[DataRequired(),NumberRange(min=1)])
     submit = SubmitField(label='Register Transaction')
+
+class BudgetForm(FlaskForm):
+    type_budget = SelectField("Type", choices=[('Apps'), ('Rent'), ('Services'), ('Groceries'), ('Cleaning'), ('Personal Care'), ('Supplements'), ('Health & Insurance'), ('Travel'), ('Others')], validators=[DataRequired()])
+    amount_budget = FloatField("Amount", validators=[DataRequired(),NumberRange(min=1)])
+    submit = SubmitField(label='Register Budget')
+
+    def validate_type(self, type):
+        type = Budget.query.filter_by(type = type.data).first()
+        if type:
+            raise ValidationError('Budget type already registered')

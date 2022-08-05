@@ -1,37 +1,62 @@
-{% extends "layout.html" %} 
-{% block title %}  
+{% extends "layout.html" %}
+{% block title %}
     Results
 {% endblock %}
 {% block main %}
 <form action="" method="post">
-    <div class="mb-3">
+    <div class="row mb-3">
         <h2>Select date</h2>
-        <input autocomplete="off" class="form-control mx-auto w-auto" type="number" name="month" placeholder="month" min="1" max="12" required>
-        <input autocomplete="off" class="form-control mx-auto w-auto" type="number" name="year" placeholder="year" min="2000" max="3000" required>
+        <label>Month</label>
+        <input autocomplete="off" class="col-auto form-control mx-auto w-auto" type="number" name="month" min="1" max="12" required>
+        <label>Year</label>
+        <input autocomplete="off" class="col-auto form-control mx-auto w-auto" type="number" name="year" min="2000" max="3000" required>
     </div>
-    <div class="mb-3">
-        <button class="btn btn-primary" type="submit">Submit</button>
+    <div class="mb-5">
+        <button class="btn btn-success" type="submit">Submit</button>
     </div>
 </form>
 
 <table class="table">
+    <h3 class="text-start">Budget</h2>
     <thead>
         <tr>
-            <th class="text-start">Day</th>
-            <th class="text-start">Type</th>
-            <th class="text-start">Transaction</th>
-            <th class="text-end">Amount</th>
-            <th class="text-end">Input date</th>
+            <th class="table-secondary text-center fw-bold">Category of expense</th>
+            <th class="table-secondary text-center fw-bold">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for type in budget %}
+        <tr>
+            <td class="text-center">{{ type.type_budget }}</td>
+            <td class="text-center">{{ type.amount_budget }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<table class="table mt-3">
+    <h3 class="text-start">Monthly expenses</h2>
+    <thead>
+        <tr>
+            <th class="table-secondary text-center fw-bold">Day</th>
+            <th class="table-secondary text-center fw-bold">Type</th>
+            <th class="table-secondary text-center fw-bold">Transaction</th>
+            <th class="table-secondary text-center fw-bold">Amount</th>
+            <th class="table-secondary text-center fw-bold">Input date</th>
+            <th class="table-secondary text-center fw-bold">Action</th>
         </tr>
     </thead>
     <tbody>
         {% for transaction in transactions %}
         <tr>
-            <td class="text-start">{{ transaction.day }}</td>
-            <td class="text-start">{{ transaction.type }}</td>
-            <td class="text-start">{{ transaction.expense }}</td>
-            <td class="text-end">{{ transaction.amount }}</td>
-            <td class="text-end">{{ transaction.input_date }}</td>
+            <td class="text-center">{{ transaction.day }}</td>
+            <td class="text-center">{{ transaction.type }}</td>
+            <td class="text-center">{{ transaction.expense }}</td>
+            <td class="text-center">{{ transaction.amount }}</td>
+            <td class="text-center">{{ transaction.input_date.strftime('%Y-%m-%d') }}</td>
+            <td class="text-center">
+                <form method="post" action="{{ url_for('delete_transaction', id=transaction.id )}}"><button class="btn btn-danger">Delete</button></form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

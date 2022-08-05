@@ -1,53 +1,63 @@
 {% extends "layout.html" %} 
-{% block title %}  
+{% block title %}
     Budget
-{% endblock %}   
+{% endblock %}
 
-{% block main %} 
-<form action="/budget" method="post">
+{% block main %}
+<form method="post" action="">
+    {{ form.hidden_tag() }}
     <div class="mb-3">
         <h2>Select type of expense</h2>
-        <select class="form-select mx-auto w-auto" name="type" required>
-            <option disabled selected>Select type of expense</option>
-            <option value="Apps">Apps</option>
-            <option value="Rent">Rent</option>
-            <option value="Services">Services</option>
-            <option value="Groceries">Groceries</option>
-            <option value="Cleaning">Cleaning</option>
-            <option value="Personal Care">Personal care</option>
-            <option value="Supplements">Supplements</option>
-            <option value="Health & Insurance">Health & Insurance</option>
-            <option value="Travel">Travel</option>
-            <option value="Others">Others</option>
-        </select>
+        <select class="form-select mx-auto w-auto" name="type_budget" required>
+            {{ form.type_budget.label(class="form-control-label")}}
+            {% for option in form.type_budget %}
+                {% if loop.first %}
+                    <option value="" disabled selected>Select</option>
+                {% endif %}
+                {{ option }}
+            {% endfor %}
+            </select>
     </div>
     <div class="mb-3">
         <h2>Enter amount</h2>
-        <input class="form-select mx-auto w-auto" autocomplete="off" type="number"name="amount" placeholder="Ex. 100" min="0" required>
+        {{ form.amount_budget.label(class="form-control-label")}}
+        {% if form.amount_budget.errors %}
+            {{ form.amount_budget(class="form-control mx-auto w-auto is-invalid", placeholder="Ex. 100") }}
+                {% for error in form.amount_budget.errors %}
+                <div class="invalid-feedback">
+                    <span>{{ error }}</span>
+                </div>
+                {% endfor %}
+        {% else %}
+            {{ form.amount_budget(class="form-control mx-auto w-auto", placeholder="Ex. 100") }}
+        {% endif %}
     </div>
     <div class="mb-3">
-        <button class="btn btn-primary" type="submit">Register budget</button>
+        {{ form.submit(class="btn btn-success") }}
     </div>
 </form>
 
-<table class="table">
+<table class="table mt-5">
     <thead>
         <tr>
-            <td class="text-start">Type</td>
-            <td class="text-start">Amount</td>
-            <td class="text-start">Input date</td>
+            <td class="table-secondary text-center fw-bold">Type</td>
+            <td class="table-secondary text-center fw-bold">Amount</td>
+            <td class="table-secondary text-center fw-bold">Input date</td>
+            <td class="table-secondary text-center fw-bold">Actions</td>
         </tr>
     </thead>
     <tbody>
-        {% for variable in budget %} 
+        {% for variable in budget %}
         <tr>
-            <td class="text-start">{{ variable.type }}</td>
-            <td class="text-start">{{ variable.amount_budget }}</td>
-            <td class="text-start">{{ variable.input_date }}</td>
+            <td class="text-center">{{ variable.type_budget }}</td>
+            <td class="text-center">{{ variable.amount_budget }}</td>
+            <td class="text-center">{{ variable.input_date.strftime('%Y-%m-%d') }}</td>
+            <td class="text-center">
+                <form method="post" action="{{ url_for('delete_budget', id=variable.id )}}"><button class="btn btn-danger">Delete</button></form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
 
 {% endblock %}
