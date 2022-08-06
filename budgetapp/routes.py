@@ -45,7 +45,8 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    return render_template("/index.html")
+    user_id = current_user.username
+    return render_template("/index.html", user_id=user_id)
 
 @app.route("/account", methods=["GET", "POST"])
 @login_required
@@ -147,7 +148,7 @@ def results():
         year  = request.form.get("year")
         if not year:
             flash("You need to enter the year", "warning")
-        transactions = Transactions.query.filter(month==month, year==year)
+        transactions = Transactions.query.filter_by(month=month, year=year, user_id=id).all()
         budget = Budget.query.filter_by(user_id=id).all()
         return render_template("results.html", transactions=transactions, budget=budget)
     budget = Budget.query.filter_by(user_id=id).all()
